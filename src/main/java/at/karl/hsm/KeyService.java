@@ -39,4 +39,8 @@ public class KeyService {
 		return false;
 	}
 
+	public long deleteAll() {
+		return Key.deleteAll();
+	}
+
 }

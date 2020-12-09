@@ -17,9 +17,12 @@ public class Key extends PanacheEntity {
 	public Key() { }
 	
 	public String name;
+
 	/** format <algorithm>-<size>, e.g. RSA-2048, EC-P256 */
 	public String algorithm;
+
 	public LocalDateTime createdAt;
+	
 	/** PKCS#8 encoded private key */
 	public byte[] encodedKey;
 
