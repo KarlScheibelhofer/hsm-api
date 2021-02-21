@@ -60,17 +60,17 @@ public class KeyServiceTest {
     Assertions.assertEquals(2, keys.size());
   }
   
-  // @Test
-  // public void testGetByTitle() {
-  //   Key newKeyTemplate = new Key();
-  //   newKeyTemplate.name = "Key-Name";
-  //   service.add(newKeyTemplate);
+  @Test
+  public void testGetByTitle() {
+    Key newKeyTemplate = new Key();
+    newKeyTemplate.name = "Key-Name";
+    service.add(newKeyTemplate);
 
-  //   final Collection<Key> ks = service.getByName(newKeyTemplate.name);
-  //   Assertions.assertNotNull(ks);
-  //   Assertions.assertEquals(1, ks.size());
-  //   Assertions.assertEquals(newKeyTemplate.name, ks.iterator().next().name);
-  // }
+    final Collection<Key> ks = service.getByName(newKeyTemplate.name);
+    Assertions.assertNotNull(ks);
+    Assertions.assertEquals(1, ks.size());
+    Assertions.assertEquals(newKeyTemplate.name, ks.iterator().next().name);
+  }
   
   @Test
   public void testAddDelete() {

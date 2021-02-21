@@ -11,7 +11,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 public class Key extends PanacheEntity {
 
 	public static List<Key> findByName(String name) {
-		return PanacheEntity.find("name", name).list();
+		return find("name", name).list();
 	}
 
 	public Key() { }
