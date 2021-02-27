@@ -10,6 +10,37 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 @Entity
 public class Key extends PanacheEntity {
 
+	public enum Algorithm {
+		EC_P256("EC", 256, "secp256r1", "SHA256withECDSA"),
+		EC_P384("EC", 384, "secp384r1", "SHA384withECDSA"),
+		RSA_PSS_2048("RSA", 2048, null, "SHA256withRSAandMGF1"),
+		;
+
+		String type;
+		int size;
+		String parameterName;
+		String preferredAlgorithm;
+		private Algorithm(String type, int size, String paramterName, String preferredAlgorithm) {
+			this.type = type;
+			this.size = size;
+			this.parameterName = paramterName;
+			this.preferredAlgorithm = preferredAlgorithm;
+		}
+
+		// public String getType() {
+		// 	return type;
+		// }
+		// public int getSize() {
+		// 	return size;
+		// }
+		// public String getParameterName() {
+		// 	return parameterName;
+		// }
+		// public String getPreferredAlgorithm() {
+		// 	return preferredAlgorithm;
+		// }
+	}
+
 	public static List<Key> findByName(String name) {
 		return find("name", name).list();
 	}
@@ -18,12 +49,14 @@ public class Key extends PanacheEntity {
 	
 	public String name;
 
-	/** format <algorithm>-<size>, e.g. RSA-2048, EC-P256 */
-	public String algorithm;
+	public Algorithm algorithm;
 
 	public LocalDateTime createdAt;
 	
 	/** PKCS#8 encoded private key */
-	public byte[] encodedKey;
+	public byte[] encodedPrivateKey;
+
+	/** X.509 encoded public key */
+	public byte[] encodedPublicKey;
 
 }

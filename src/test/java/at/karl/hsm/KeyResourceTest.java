@@ -53,7 +53,7 @@ public class KeyResourceTest {
         Map<String,String> requestBody = new HashMap<>();
         String name = "testkey1";
         requestBody.put("name", name);
-        requestBody.put("algorithm", "EC-P256");
+        requestBody.put("algorithm", "EC_P256");
         requestBody.put("createdAt", LocalDateTime.parse("2019-10-17T11:23:47.123").toString());
     	int id = 
 	        given()
@@ -80,7 +80,7 @@ public class KeyResourceTest {
     public void testGetById() {
         Map<String,String> requestBody = new HashMap<>();
         String name = "testkey2";
-        String algorithm = "EC-P384";
+        String algorithm = "EC_P384";
         String createdAt = LocalDateTime.parse("2019-10-17T11:23:47.123").toString();
         requestBody.put("name", name);
         requestBody.put("algorithm", algorithm);
@@ -128,6 +128,66 @@ public class KeyResourceTest {
         Map<String,String> requestBody = new HashMap<>();
         String name = "mykey7";
         requestBody.put("name", name);
+        Response response = 
+            given()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(requestBody)
+            .when()
+                .post("/keys")
+            .then()
+                .statusCode(201)
+            .extract()
+                .response();
+
+        String createdAtStr = response.path("createdAt");
+        LocalDateTime createdAt = LocalDateTime.parse(createdAtStr);
+        assertThat(createdAt, within(2, ChronoUnit.SECONDS, LocalDateTime.now()));
+
+        int id = response.path("id");
+        given()
+            .when()
+                .delete("/keys/{id}", id)
+            .then()
+                .statusCode(204);     
+    }    
+
+    @Test
+    @Order(7)
+    public void testGenerate() {
+        Map<String,String> requestBody = new HashMap<>();
+        String name = "myGenKey8";
+        requestBody.put("name", name);
+        requestBody.put("algorithm", "EC_P256");
+        Response response = 
+            given()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(requestBody)
+            .when()
+                .post("/keys")
+            .then()
+                .statusCode(201)
+            .extract()
+                .response();
+
+        String createdAtStr = response.path("createdAt");
+        LocalDateTime createdAt = LocalDateTime.parse(createdAtStr);
+        assertThat(createdAt, within(2, ChronoUnit.SECONDS, LocalDateTime.now()));
+
+        int id = response.path("id");
+        given()
+            .when()
+                .delete("/keys/{id}", id)
+            .then()
+                .statusCode(204);     
+    }    
+
+    @Test
+    @Order(8)
+    public void testGenerateRSA() {
+        Map<String,String> requestBody = new HashMap<>();
+        String name = "myGenKey8";
+        requestBody.put("name", name);
+        requestBody.put("algorithm", "RSA_2048");
         Response response = 
             given()
                 .contentType(MediaType.APPLICATION_JSON)

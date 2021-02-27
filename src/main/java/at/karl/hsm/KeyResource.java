@@ -42,7 +42,7 @@ public class KeyResource {
 
     @POST
     public Response add(Key key) {
-    	Key k = service.add(key);
+    	Key k = service.create(key);
     	return Response.status(Response.Status.CREATED).entity(k).build();
      }
 
