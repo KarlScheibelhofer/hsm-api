@@ -1,9 +1,7 @@
 package at.karl.hsm;
 
-import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
 import java.security.spec.ECGenParameterSpec;
 import java.time.LocalDateTime;
 import java.util.Collection;

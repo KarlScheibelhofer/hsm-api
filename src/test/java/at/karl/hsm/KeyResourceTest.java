@@ -187,7 +187,7 @@ public class KeyResourceTest {
         Map<String,String> requestBody = new HashMap<>();
         String name = "myGenKey8";
         requestBody.put("name", name);
-        requestBody.put("algorithm", "RSA_2048");
+        requestBody.put("algorithm", "RSA_PSS_2048");
         Response response = 
             given()
                 .contentType(MediaType.APPLICATION_JSON)
