@@ -104,14 +104,18 @@ public class KeyServiceTest {
   public void testGenerate() {
     Key newKeyTemplate = new Key();
     newKeyTemplate.name = "NewGeneratedKey";
-    newKeyTemplate.algorithm = Key.Algorithm.EC_P256;
 
-    Key newKey1 = service.create(newKeyTemplate);
-
-    Assertions.assertEquals(newKeyTemplate.name, newKey1.name);
-    Assertions.assertNotNull(newKey1.id);
-    Assertions.assertEquals(Key.Algorithm.EC_P256, newKey1.algorithm);
-    Assertions.assertNotNull(newKey1.encodedPrivateKey);
-    Assertions.assertNotNull(newKey1.encodedPublicKey);
+    // test with all available key algorithms
+    for (Key.Algorithm keyAlgoritm : Key.Algorithm.values()) {
+      newKeyTemplate.algorithm = keyAlgoritm;
+      Key newKey1 = service.create(newKeyTemplate);
+  
+      Assertions.assertEquals(newKeyTemplate.name, newKey1.name);
+      Assertions.assertNotNull(newKey1.id);
+      Assertions.assertEquals(keyAlgoritm, newKey1.algorithm);
+      Assertions.assertNotNull(newKey1.encodedPrivateKey);
+      Assertions.assertNotNull(newKey1.encodedPublicKey);
+    }
   }
+
 }

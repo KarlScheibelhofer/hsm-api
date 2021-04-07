@@ -27,18 +27,6 @@ public class Key extends PanacheEntity {
 			this.preferredAlgorithm = preferredAlgorithm;
 		}
 
-		// public String getType() {
-		// 	return type;
-		// }
-		// public int getSize() {
-		// 	return size;
-		// }
-		// public String getParameterName() {
-		// 	return parameterName;
-		// }
-		// public String getPreferredAlgorithm() {
-		// 	return preferredAlgorithm;
-		// }
 	}
 
 	public static List<Key> findByName(String name) {

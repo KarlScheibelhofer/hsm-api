@@ -5,11 +5,13 @@ import static io.restassured.RestAssured.given;
 import static org.exparity.hamcrest.date.LocalDateTimeMatchers.within;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.Matchers.not;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -154,61 +156,54 @@ public class KeyResourceTest {
     @Test
     @Order(7)
     public void testGenerate() {
-        Map<String,String> requestBody = new HashMap<>();
-        String name = "myGenKey8";
-        requestBody.put("name", name);
-        requestBody.put("algorithm", "EC_P256");
-        Response response = 
+        for (String keyAlgorithm : Arrays.asList(null, "EC_P256", "RSA_PSS_2048")) {
+            Map<String,String> requestBody = new HashMap<>();
+            String name = "myGenKey8";
+            requestBody.put("name", name);
+            requestBody.put("algorithm", keyAlgorithm);
+            Response response = 
+                given()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(requestBody)
+                .when()
+                    .post("/keys")
+                .then()
+                    .statusCode(201)
+                .extract()
+                    .response();
+    
+            String createdAtStr = response.path("createdAt");
+            LocalDateTime createdAt = LocalDateTime.parse(createdAtStr);
+            assertThat(createdAt, within(2, ChronoUnit.SECONDS, LocalDateTime.now()));
+            
+            String createdKeyAlgStr = response.path("algorithm");
+            String expectedKeyAlgorithm = (keyAlgorithm != null) ? keyAlgorithm : "EC_P256";
+            assertThat(createdKeyAlgStr, equalTo(expectedKeyAlgorithm));
+
+            int id = response.path("id");
             given()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(requestBody)
-            .when()
-                .post("/keys")
-            .then()
-                .statusCode(201)
-            .extract()
-                .response();
-
-        String createdAtStr = response.path("createdAt");
-        LocalDateTime createdAt = LocalDateTime.parse(createdAtStr);
-        assertThat(createdAt, within(2, ChronoUnit.SECONDS, LocalDateTime.now()));
-
-        int id = response.path("id");
-        given()
-            .when()
-                .delete("/keys/{id}", id)
-            .then()
-                .statusCode(204);     
+                .when()
+                    .delete("/keys/{id}", id)
+                .then()
+                    .statusCode(204);     
+        }
     }    
 
     @Test
     @Order(8)
-    public void testGenerateRSA() {
-        Map<String,String> requestBody = new HashMap<>();
-        String name = "myGenKey8";
-        requestBody.put("name", name);
-        requestBody.put("algorithm", "RSA_PSS_2048");
-        Response response = 
-            given()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(requestBody)
-            .when()
-                .post("/keys")
-            .then()
-                .statusCode(201)
-            .extract()
-                .response();
-
-        String createdAtStr = response.path("createdAt");
-        LocalDateTime createdAt = LocalDateTime.parse(createdAtStr);
-        assertThat(createdAt, within(2, ChronoUnit.SECONDS, LocalDateTime.now()));
-
-        int id = response.path("id");
+    public void testGenerateInvalid() {
+        Map<String,String> requestBody = Map.of(
+            "name", "myGenKeyInvalidAlg",
+            "algorithm", "RSA_X962_2048"
+        );
+        
         given()
-            .when()
-                .delete("/keys/{id}", id)
-            .then()
-                .statusCode(204);     
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(requestBody)
+        .when()
+            .post("/keys")
+        .then()
+            .statusCode(400);   
     }    
 
 }
