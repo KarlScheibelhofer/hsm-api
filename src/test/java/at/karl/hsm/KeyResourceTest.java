@@ -22,10 +22,12 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.Response;
 
 @QuarkusTest
+@QuarkusTestResource(PostgresResource.class) 
 @TestMethodOrder(OrderAnnotation.class)
 public class KeyResourceTest {
 

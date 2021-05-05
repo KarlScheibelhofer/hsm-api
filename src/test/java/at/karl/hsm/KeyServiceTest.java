@@ -9,7 +9,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.wildfly.common.Assert;
 
+import io.quarkus.test.common.QuarkusTestResource;
+
 @TransactionalQuarkusTest
+@QuarkusTestResource(PostgresResource.class) 
 public class KeyServiceTest {
 
   @Inject
