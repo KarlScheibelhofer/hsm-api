@@ -1,8 +1,8 @@
 # hsm-api project
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+This project uses Quarkus, see https://quarkus.io/ .
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+Tested with GraaVM 21.0.0.2, Java 11.
 
 ## Running the application in dev mode
 
@@ -31,7 +31,7 @@ If you want to learn more about building native executables, please consult http
 
 ## Setup DB
 
-The JUnit tests start the required automatically. 
+The JUnit tests start the required PostgreSQL DB automatically. 
 
 If you start the application alone, you must provide a running DB.
 To start PostgreSQL inside a container with a empty database suitable for this project:
