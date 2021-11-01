@@ -1,17 +1,15 @@
 package at.karl.hsm;
 
 import java.security.GeneralSecurityException;
-import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
 import java.security.spec.ECGenParameterSpec;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.BadRequestException;
 
 @ApplicationScoped
 @Transactional
@@ -72,7 +70,7 @@ public class KeyService {
 			newKeyTemplate.encodedPrivateKey = kp.getPrivate().getEncoded();
 			newKeyTemplate.encodedPublicKey = kp.getPublic().getEncoded();
 		} catch (GeneralSecurityException e) {
-			throw new KeyException(Response.Status.BAD_REQUEST, "invalid algorithm", e);
+			throw new BadRequestException("invalid algorithm", e);
 		}
 	}
 

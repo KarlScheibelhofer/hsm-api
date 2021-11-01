@@ -196,7 +196,7 @@ public class KeyResourceTest {
     public void testGenerateInvalid() {
         Map<String,String> requestBody = Map.of(
             "name", "myGenKeyInvalidAlg",
-            "algorithm", "RSA_X962_2048"
+            "algorithm", "ED25519"
         );
         
         given()
