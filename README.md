@@ -36,6 +36,6 @@ The JUnit tests start the required PostgreSQL DB automatically.
 If you start the application alone, you must provide a running DB.
 To start PostgreSQL inside a container with a empty database suitable for this project:
 ```
-docker run --name postgres-hsm --ulimit memlock=-1:-1 -it --rm=true --memory-swappiness=0 -e POSTGRES_USER=hsm -e POSTGRES_PASSWORD=hsm -e POSTGRES_DB=hsm_db -p 5432:5432 postgres:13.0
+docker run --name postgres-hsm --ulimit memlock=-1:-1 -it --rm=true --memory-swappiness=0 -e POSTGRES_USER=hsm -e POSTGRES_PASSWORD=hsm -e POSTGRES_DB=hsm_db -p 5432:5432 postgres:14
 ```
 

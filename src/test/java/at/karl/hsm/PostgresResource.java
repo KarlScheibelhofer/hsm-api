@@ -11,7 +11,7 @@ public class PostgresResource implements
         QuarkusTestResourceLifecycleManager {
 
   static PostgreSQLContainer<?> db =
-      new PostgreSQLContainer<>("postgres:13") 
+      new PostgreSQLContainer<>("postgres:14") 
         .withDatabaseName("hsm_db")
         .withUsername("hsm")
         .withPassword("hsm");

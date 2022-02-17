@@ -21,6 +21,8 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -155,40 +157,39 @@ public class KeyResourceTest {
                 .statusCode(204);     
     }    
 
-    @Test
+    @ParameterizedTest
+    @ValueSource(strings = {"EC_P256", "RSA_PSS_2048", "EC_ED25519", "EC_ED448"})
     @Order(7)
-    public void testGenerate() {
-        for (String keyAlgorithm : Arrays.asList(null, "EC_P256", "RSA_PSS_2048")) {
-            Map<String,String> requestBody = new HashMap<>();
-            String name = "myGenKey8";
-            requestBody.put("name", name);
-            requestBody.put("algorithm", keyAlgorithm);
-            Response response = 
-                given()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(requestBody)
-                .when()
-                    .post("/keys")
-                .then()
-                    .statusCode(201)
-                .extract()
-                    .response();
-    
-            String createdAtStr = response.path("createdAt");
-            LocalDateTime createdAt = LocalDateTime.parse(createdAtStr);
-            assertThat(createdAt, within(2, ChronoUnit.SECONDS, LocalDateTime.now()));
-            
-            String createdKeyAlgStr = response.path("algorithm");
-            String expectedKeyAlgorithm = (keyAlgorithm != null) ? keyAlgorithm : "EC_P256";
-            assertThat(createdKeyAlgStr, equalTo(expectedKeyAlgorithm));
-
-            int id = response.path("id");
+    public void testGenerate(String keyAlgorithm) {
+        Map<String,String> requestBody = new HashMap<>();
+        String name = "myGenKey8";
+        requestBody.put("name", name);
+        requestBody.put("algorithm", keyAlgorithm);
+        Response response = 
             given()
-                .when()
-                    .delete("/keys/{id}", id)
-                .then()
-                    .statusCode(204);     
-        }
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(requestBody)
+            .when()
+                .post("/keys")
+            .then()
+                .statusCode(201)
+            .extract()
+                .response();
+
+        String createdAtStr = response.path("createdAt");
+        LocalDateTime createdAt = LocalDateTime.parse(createdAtStr);
+        assertThat(createdAt, within(2, ChronoUnit.SECONDS, LocalDateTime.now()));
+        
+        String createdKeyAlgStr = response.path("algorithm");
+        String expectedKeyAlgorithm = (keyAlgorithm != null) ? keyAlgorithm : "EC_P256";
+        assertThat(createdKeyAlgStr, equalTo(expectedKeyAlgorithm));
+
+        int id = response.path("id");
+        given()
+            .when()
+                .delete("/keys/{id}", id)
+            .then()
+                .statusCode(204);     
     }    
 
     @Test
@@ -196,7 +197,7 @@ public class KeyResourceTest {
     public void testGenerateInvalid() {
         Map<String,String> requestBody = Map.of(
             "name", "myGenKeyInvalidAlg",
-            "algorithm", "ED25519"
+            "algorithm", "Ed25519"
         );
         
         given()
