@@ -1,5 +1,9 @@
 package at.karl.hsm;
 
+import java.nio.charset.StandardCharsets;
+import java.security.PublicKey;
+import java.security.spec.MGF1ParameterSpec;
+import java.security.spec.PSSParameterSpec;
 import java.util.Collection;
 
 import javax.inject.Inject;
@@ -7,8 +11,11 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.wildfly.common.Assert;
 
+import at.karl.hsm.Key.Algorithm;
 import io.quarkus.test.common.QuarkusTestResource;
 
 @TransactionalQuarkusTest
@@ -119,6 +126,28 @@ public class KeyServiceTest {
       Assertions.assertNotNull(newKey1.encodedPrivateKey);
       Assertions.assertNotNull(newKey1.encodedPublicKey);
     }
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"EC_P256", "RSA_PSS_2048", "EC_ED25519", "EC_ED448"})
+  public void testSign(String keyAlgorithm) throws Exception {
+    Key keyTemplate = new Key();
+    keyTemplate.algorithm = Algorithm.valueOf(keyAlgorithm);
+    keyTemplate.name = "TestSignatureKey";
+
+    Key signatureKey = service.create(keyTemplate);
+    
+    byte[] data = "This is my data!".getBytes(StandardCharsets.UTF_8);
+    Signature signature = service.sign(signatureKey.id, data);
+    
+    PublicKey publicKey = signatureKey.getPublicKey();
+    java.security.Signature sigService = java.security.Signature.getInstance(signatureKey.algorithm.preferredAlgorithm);
+    sigService.initVerify(publicKey);
+    switch (signatureKey.algorithm.preferredAlgorithm) {
+      case "RSASSA-PSS" -> sigService.setParameter(new PSSParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA256, 32, 1));
+    }    
+    sigService.update(data);
+    Assertions.assertTrue(sigService.verify(signature.signatureValue));
   }
 
 }

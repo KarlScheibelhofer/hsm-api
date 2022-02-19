@@ -17,11 +17,11 @@ import javax.ws.rs.core.Response;
 public class KeyResource {
 
     @Inject
-    KeyService service;
+    KeyService keyService;
 
     @GET
     public Response get(@PathParam("id") long id) {
-        Key key = service.getById(id);
+        Key key = keyService.getById(id);
         if (key == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
@@ -30,13 +30,18 @@ public class KeyResource {
 
     @POST
     @Path("/sign")
-    public Response sign(@PathParam("id") long id, Hash h) {
-        return Response.ok("hey-i-am-a-signature-with-id-#" + id).build();
+    public Response sign(@PathParam("id") long id, byte[] data) {
+        Key key = keyService.getById(id);
+        if (key == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        Signature s = keyService.sign(id, data);
+        return Response.ok(s).build();
     }
 
     @DELETE
     public Response delete(@PathParam("id") long id) {
-        if (service.delete(id) == false) {
+        if (keyService.delete(id) == false) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         return Response.noContent().build();

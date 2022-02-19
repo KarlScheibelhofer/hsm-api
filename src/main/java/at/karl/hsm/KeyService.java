@@ -1,9 +1,15 @@
 package at.karl.hsm;
 
 import java.security.GeneralSecurityException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.SignatureException;
 import java.security.spec.ECGenParameterSpec;
+import java.security.spec.MGF1ParameterSpec;
+import java.security.spec.PSSParameterSpec;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
@@ -73,5 +79,25 @@ public class KeyService {
 			throw new BadRequestException("invalid algorithm", e);
 		}
 	}
+
+	public Signature sign(long id, byte[] data) {
+        // false means we provide the hash value, for Ed25519 use SHA-512
+        // EdDSAParameterSpec spec = new EdDSAParameterSpec(false);
+		try {
+			Key key = getById(id);
+			String signatureAlgorithm = key.algorithm.preferredAlgorithm;
+			java.security.Signature sigService = java.security.Signature.getInstance(signatureAlgorithm);
+			sigService.initSign(key.getPrivateKey());
+			switch (signatureAlgorithm) {
+				case "RSASSA-PSS" -> sigService.setParameter(new PSSParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA256, 32, 1));
+			}
+			sigService.update(data);
+			byte[] signatureValue = sigService.sign();
+			Signature signature = new Signature(id, signatureAlgorithm, signatureValue);
+			return signature;
+		} catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException | InvalidAlgorithmParameterException e) {
+			throw new RuntimeException("failed to create signature: " + e.getMessage(), e);
+		}
+    }
 
 }

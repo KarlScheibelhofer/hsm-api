@@ -161,7 +161,7 @@ public class KeyResourceTest {
     @Order(7)
     public void testGenerate(String keyAlgorithm) {
         Map<String,String> requestBody = new HashMap<>();
-        String name = "myGenKey8";
+        String name = "myGenKey8-" + keyAlgorithm;
         requestBody.put("name", name);
         requestBody.put("algorithm", keyAlgorithm);
         Response response = 
