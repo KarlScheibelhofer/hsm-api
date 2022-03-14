@@ -11,7 +11,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/keys")
+import io.quarkus.logging.Log;
+
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class KeyResource {
@@ -21,6 +22,7 @@ public class KeyResource {
 
     @GET
     public Response get(@PathParam("id") long id) {
+        Log.info("get key " + id);
         Key key = keyService.getById(id);
         if (key == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -30,7 +32,21 @@ public class KeyResource {
 
     @POST
     @Path("/sign")
-    public Response sign(@PathParam("id") long id, byte[] data) {
+    public Response signJson(@PathParam("id") long id, byte[] data) {
+        Log.info("sign JSON with key " + id);
+        Key key = keyService.getById(id);
+        if (key == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        Signature s = keyService.sign(id, data);
+        return Response.ok(s).build();
+    }
+
+    @POST
+    @Path("/sign")
+    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
+    public Response signBinaryData(@PathParam("id") long id, byte[] data) {
+        Log.info("sign binary with key " + id);
         Key key = keyService.getById(id);
         if (key == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -41,6 +57,7 @@ public class KeyResource {
 
     @DELETE
     public Response delete(@PathParam("id") long id) {
+        Log.info("delete key " + id);
         if (keyService.delete(id) == false) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }

@@ -1,12 +1,11 @@
-GET http://localhost:8080/keys HTTP/1.1
+GET http://localhost:8080/keys
 
 ###
-
 GET http://localhost:8080/keys/1
 
 ###
 
-POST http://localhost:8080/keys HTTP/1.1
+POST http://localhost:8080/keys
 content-type: application/json
 
 {
@@ -15,7 +14,7 @@ content-type: application/json
 
 ###
 
-POST http://localhost:8080/keys HTTP/1.1
+POST http://localhost:8080/keys
 content-type: application/json
 
 {
@@ -24,38 +23,17 @@ content-type: application/json
 
 ###
 
-GET http://localhost:8080/keys/47
-
-###
-
-
-DELETE http://localhost:8080/keys/47 HTTP/1.1
-
-###
-
-POST http://localhost:8080/keys/53 HTTP/1.1
+POST http://localhost:8080/keys
 content-type: application/json
 
 {
-    "algorithm": "EC_P256"
+    "algorithm": "RSA_PSS_2048",
+    "createdAt": "xyz"
 }
 
 ###
 
-GET http://localhost:8080/keys/53
-
-###
-
-POST http://localhost:8080/keys/13 HTTP/1.1
-content-type: application/json
-
-###
-
-GET http://localhost:8080/keys/456
-
-###
-
-POST http://localhost:8080/keys/1/sign HTTP/1.1
+POST http://localhost:8080/keys/1/sign
 content-type: application/json
 
 {
@@ -64,7 +42,7 @@ content-type: application/json
 
 ###
 
-POST http://localhost:8080/keys HTTP/1.1
+POST http://localhost:8080/keys
 content-type: application/json
 
 {
@@ -73,7 +51,21 @@ content-type: application/json
 
 ###
 
-POST http://localhost:8080/keys/1/sign HTTP/1.1
+POST http://localhost:8080/keys/1/sign
+content-type: application/json
+
+abcd
+
+###
+
+POST http://localhost:8080/keys/1/sign
+content-type: application/octet-stream
+
+abcd
+
+###
+
+POST http://localhost:8080/keys/2/sign
 content-type: application/json
 
 abcd

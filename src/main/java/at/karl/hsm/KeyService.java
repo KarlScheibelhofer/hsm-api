@@ -12,20 +12,34 @@ import java.security.spec.MGF1ParameterSpec;
 import java.security.spec.PSSParameterSpec;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
 import javax.ws.rs.BadRequestException;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+import static io.quarkiverse.loggingjson.providers.KeyValueStructuredArgument.*;
+import io.quarkus.logging.Log;
+
 @ApplicationScoped
 @Transactional
 public class KeyService {
 
+	@ConfigProperty(name = "ham-api.keys.log-id", defaultValue = "key-service")
+	String logId;
+
 	public Key getById(long id) {
-		return Key.findById(id);
+		long t0 = System.nanoTime();
+		Key k = Key.findById(id);
+		long t1 = System.nanoTime();
+		Log.infof("getById", kv("stats", Map.of("code", "0", "duration", Double.valueOf((t1 - t0)/1e6).toString())));
+		return k;
 	}
 
 	public Collection<Key> getAll() {
+		Log.infof("getAll", kv("logId", logId));
 		return Key.listAll();
 	}
 
@@ -34,6 +48,7 @@ public class KeyService {
 	}
 
 	public Key create(Key k) {
+		Log.info(logId + " - create");
 		if (k.encodedPrivateKey == null && k.encodedPublicKey == null) {
 			generate(k);
 		}
