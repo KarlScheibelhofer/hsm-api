@@ -31,7 +31,7 @@ public class Key extends PanacheEntity {
 		/* the key size in bit */
 		int size;
 
-		/* the java name for the key parameters */
+		/* the java name for the key generation parameters, used for EC curves */
 		String parameterName;
 
 		/* the standard Java algorithm name for signature or encryption */ 
@@ -68,7 +68,7 @@ public class Key extends PanacheEntity {
 
 	transient private PublicKey publicKey;
 
-	public PrivateKey getPrivateKey() {
+	PrivateKey getPrivateKey() {
 		if (this.privateKey != null) {
 			return this.privateKey;
 		}
@@ -83,7 +83,7 @@ public class Key extends PanacheEntity {
 		return this.privateKey;
 	}
 
-	public PublicKey getPublicKey() {
+	PublicKey getPublicKey() {
 		if (this.publicKey != null) {
 			return this.publicKey;
 		}

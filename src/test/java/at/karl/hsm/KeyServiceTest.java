@@ -1,7 +1,9 @@
 package at.karl.hsm;
 
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.security.PublicKey;
+import java.security.spec.EdDSAParameterSpec;
 import java.security.spec.MGF1ParameterSpec;
 import java.security.spec.PSSParameterSpec;
 import java.util.Collection;
@@ -130,7 +132,7 @@ public class KeyServiceTest {
 
   @ParameterizedTest
   @ValueSource(strings = {"EC_P256", "RSA_PSS_2048", "EC_ED25519", "EC_ED448"})
-  public void testSign(String keyAlgorithm) throws Exception {
+  public void testSignData(String keyAlgorithm) throws Exception {
     Key keyTemplate = new Key();
     keyTemplate.algorithm = Algorithm.valueOf(keyAlgorithm);
     keyTemplate.name = "TestSignatureKey";
@@ -138,7 +140,7 @@ public class KeyServiceTest {
     Key signatureKey = service.create(keyTemplate);
     
     byte[] data = "This is my data!".getBytes(StandardCharsets.UTF_8);
-    Signature signature = service.sign(signatureKey.id, data);
+    Signature signature = service.signData(signatureKey.id, data);
     
     PublicKey publicKey = signatureKey.getPublicKey();
     java.security.Signature sigService = java.security.Signature.getInstance(signatureKey.algorithm.preferredAlgorithm);
@@ -148,6 +150,61 @@ public class KeyServiceTest {
     }    
     sigService.update(data);
     Assertions.assertTrue(sigService.verify(signature.signatureValue));
+  }
+
+  @Test
+  public void testSignHashECP256() throws Exception {
+    String keyAlgorithm = "EC_P256";
+    String hashAlgorithm = "SHA-256";
+
+    Key keyTemplate = new Key();
+    keyTemplate.algorithm = Algorithm.valueOf(keyAlgorithm);
+    keyTemplate.name = "TestSignatureKey2";
+
+    Key signatureKey = service.create(keyTemplate);
+    
+    byte[] data = "This is my data!".getBytes(StandardCharsets.UTF_8);
+    byte[] hash = MessageDigest.getInstance(hashAlgorithm).digest(data);
+    Signature signature = service.signHash(signatureKey.id, hashAlgorithm, hash);
+    
+    PublicKey publicKey = signatureKey.getPublicKey();
+    java.security.Signature sigService = java.security.Signature.getInstance("SHA256withECDSA");
+    sigService.initVerify(publicKey);
+
+    sigService.update(data);
+    Assertions.assertTrue(sigService.verify(signature.signatureValue));
+    Assertions.assertEquals("SHA256withECDSA", signature.signatureAlgorithm);
+  }
+
+  @Test
+  public void testSignHashECED25519() throws Exception {
+    String keyAlgorithm = "EC_ED25519";
+    String hashAlgorithm = "SHA-512";
+
+    Key keyTemplate = new Key();
+    keyTemplate.algorithm = Algorithm.valueOf(keyAlgorithm);
+    keyTemplate.name = "TestSignatureKey2";
+
+    Key signatureKey = service.create(keyTemplate);
+    
+    byte[] data = "This is my data!".getBytes(StandardCharsets.UTF_8);
+    byte[] hash = MessageDigest.getInstance(hashAlgorithm).digest(data);
+
+    Signature signature = service.signHash(signatureKey.id, hashAlgorithm, hash);
+    
+    PublicKey publicKey = signatureKey.getPublicKey();
+    java.security.Signature sigService = java.security.Signature.getInstance("Ed25519");
+    sigService.initVerify(publicKey);
+
+    sigService.update(data);
+    
+    // this works however ???
+    // sigService.setParameter(new EdDSAParameterSpec(false));
+    // sigService.update(hash);
+
+    Assertions.assertTrue(sigService.verify(signature.signatureValue));
+
+    Assertions.assertEquals("Ed25519", signature.signatureAlgorithm);
   }
 
 }

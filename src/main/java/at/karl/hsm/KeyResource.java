@@ -38,7 +38,7 @@ public class KeyResource {
         if (key == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        Signature s = keyService.sign(id, data);
+        Signature s = keyService.signData(id, data);
         return Response.ok(s).build();
     }
 
@@ -51,7 +51,7 @@ public class KeyResource {
         if (key == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        Signature s = keyService.sign(id, data);
+        Signature s = keyService.signData(id, data);
         return Response.ok(s).build();
     }
 

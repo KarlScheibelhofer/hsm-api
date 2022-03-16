@@ -13,31 +13,19 @@ content-type: application/json
 }
 
 ###
-
 POST http://localhost:8080/keys
 content-type: application/json
 
 {
-    "algorithm": "RSA_PSS_2048"
+    "algorithm": "EC_ED25519"
 }
 
 ###
-
 POST http://localhost:8080/keys
 content-type: application/json
 
 {
-    "algorithm": "RSA_PSS_2048",
-    "createdAt": "xyz"
-}
-
-###
-
-POST http://localhost:8080/keys/1/sign
-content-type: application/json
-
-{
-    "algorithm": "EdDSA" 
+    "algorithm": "EC_ED448"
 }
 
 ###
@@ -65,7 +53,13 @@ abcd
 
 ###
 
-POST http://localhost:8080/keys/2/sign
-content-type: application/json
+POST http://localhost:8080/keys/3/sign
+content-type: application/octet-stream
+
+abcd
+
+###
+
+DELETE http://localhost:8080/keys/1
 
 abcd

@@ -8,6 +8,7 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
 import java.security.spec.ECGenParameterSpec;
+import java.security.spec.EdDSAParameterSpec;
 import java.security.spec.MGF1ParameterSpec;
 import java.security.spec.PSSParameterSpec;
 import java.time.LocalDateTime;
@@ -95,7 +96,7 @@ public class KeyService {
 		}
 	}
 
-	public Signature sign(long id, byte[] data) {
+	public Signature signData(long id, byte[] data) {
         // false means we provide the hash value, for Ed25519 use SHA-512
         // EdDSAParameterSpec spec = new EdDSAParameterSpec(false);
 		try {
@@ -107,6 +108,31 @@ public class KeyService {
 				case "RSASSA-PSS" -> sigService.setParameter(new PSSParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA256, 32, 1));
 			}
 			sigService.update(data);
+			byte[] signatureValue = sigService.sign();
+			Signature signature = new Signature(id, signatureAlgorithm, signatureValue);
+			return signature;
+		} catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException | InvalidAlgorithmParameterException e) {
+			throw new RuntimeException("failed to create signature: " + e.getMessage(), e);
+		}
+    }
+
+	public Signature signHash(long id, String hashAlgorithm, byte[] hash) {
+		try {
+			Key key = getById(id);
+			String rawSignatureAlgorithm;
+			String signatureAlgorithm;
+			switch(key.algorithm.type) {
+				case "EC"      : rawSignatureAlgorithm = "NONEwithECDSA"; signatureAlgorithm = hashAlgorithm.replace("-","") + "withECDSA"; break;
+				case "Ed25519" : rawSignatureAlgorithm = "Ed25519"; signatureAlgorithm = "Ed25519"; break;
+				case "Ed448"   : rawSignatureAlgorithm = "Ed448"; signatureAlgorithm = "Ed448"; break;
+				default        : throw new RuntimeException("algorithm " + key.algorithm.type + " only supports singing data, not hashes");
+			};
+			java.security.Signature sigService = java.security.Signature.getInstance(rawSignatureAlgorithm);
+			sigService.initSign(key.getPrivateKey());
+			switch (key.algorithm.type) {
+				case "Ed25519", "Ed448" -> sigService.setParameter(new EdDSAParameterSpec(false));
+			}
+			sigService.update(hash);
 			byte[] signatureValue = sigService.sign();
 			Signature signature = new Signature(id, signatureAlgorithm, signatureValue);
 			return signature;
