@@ -21,8 +21,6 @@ The application is now runnable using `java -jar target/hsm-api-1.0-SNAPSHOT-run
 
 ## Creating a native executable
 
-**Atttention!** The native image seems to have an issue with the embedded ressource of class KeyResource.
-
 You can create a native executable using: `./mvnw package -Pnative`.
 
 Or, if you don't have GraalVM installed, you can run the native executable build in a container using: `./mvnw package -Pnative -Dquarkus.native.container-build=true`.
@@ -33,10 +31,14 @@ If you want to learn more about building native executables, please consult http
 
 ## Create Container Image
 
+### JVM Container Image
+
+This chapter shows how to build an image containing the Java VM and the appliacation, i.e. JARs.
+
 To create a container image of the aplication, use:
 
-```
-./mvnw clean package -Dquarkus.container-image.build=true -Dquarkus.container-image.tag=karl/hsm-api:latest
+```bash
+./mvnw clean package -Dquarkus.container-image.build=true -Dquarkus.container-image.image=karl/hsm-api:latest
 ```
 
 Or alternatively:
@@ -48,14 +50,48 @@ docker build -f src/main/docker/Dockerfile.jvm -t karl/hsm-api:latest .
 Then, you can run database and application using `docker-compose` like this:
 
 ```
-docker-compose --file src/main/docker/docker-compose.yaml up -d
-docker run --interactive --tty --rm --publish 8080:8080 --network=host karl/hsm-api:latest
+docker-compose --file src/main/docker/docker-compose.yaml up --detach
 ```  
 
 And stop application and database when finished:
 
 ```  
-docker-compose --file src/main/docker/docker-compose.yaml up -d
+docker-compose --file src/main/docker/docker-compose.yaml down
+```  
+
+### Native Container Image
+
+In this chapter, we create a container image with the native executable. It will not contain a Java VM or ony JARs.
+
+To create a native container image, type:
+
+```
+./mvnw clean package -Dquarkus.container-image.build=true -Pnative -Dquarkus.native.container-build=true -Dquarkus.native.builder-image=quay.io/quarkus/ubi-quarkus-native-image:21.3.1-java17 -Dquarkus.container-image.image=karl/hsm-api-native:latest
+```
+
+This uses a GraalVM from a docker image. 
+If you prefer to build with a local GraalVM installation, set `GRAALVM_HOME` environment variable and use this command:
+
+```
+./mvnw clean package -Dquarkus.container-image.build=true -Pnative -Dquarkus.native.builder-image=quay.io/quarkus/ubi-quarkus-native-image:21.3.1-java17 -Dquarkus.container-image.image=karl/hsm-api-native:latest
+```
+
+If you have build and tested the native executable before (which takes several minutes) and want this packaged in an image, type:
+
+```
+./mvnw package -Dquarkus.container-image.build=true -Pnative -Dquarkus.native.reuse-existing=true -Dquarkus.container-image.image=karl/hsm-api-native:latest
+```
+
+Then, you can run database and application using `docker-compose` like this:
+
+```
+docker-compose --file src/main/docker/docker-compose-native.yaml up --detach 
+```  
+
+And stop application and database when finished:
+
+```  
+docker-compose --file src/main/docker/docker-compose-native.yaml down
 ```  
 
 ## Setup DB

@@ -97,8 +97,6 @@ public class KeyService {
 	}
 
 	public Signature signData(long id, byte[] data) {
-        // false means we provide the hash value, for Ed25519 use SHA-512
-        // EdDSAParameterSpec spec = new EdDSAParameterSpec(false);
 		try {
 			Key key = getById(id);
 			String signatureAlgorithm = key.algorithm.preferredAlgorithm;

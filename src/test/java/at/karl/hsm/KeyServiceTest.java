@@ -52,6 +52,12 @@ public class KeyServiceTest {
 
     Assertions.assertNotNull(k);
     Assertions.assertEquals(newKeyTemplate.name, k.name);
+
+    // call a second time, now it will come from the cache
+    final Key kc = service.getById(newKey1.id);
+
+    Assertions.assertNotNull(kc);
+    Assertions.assertEquals(newKeyTemplate.name, kc.name);
   }
 
   @Test
@@ -129,7 +135,7 @@ public class KeyServiceTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"EC_P256", "RSA_PSS_2048", "EC_ED25519", "EC_ED448"})
+  @ValueSource(strings = {"EC_P256", "EC_P384", "EC_P521", "RSA_PSS_2048", "EC_ED25519", "EC_ED448"})
   public void testSignData(String keyAlgorithm) throws Exception {
     Key keyTemplate = new Key();
     keyTemplate.algorithm = Algorithm.valueOf(keyAlgorithm);
