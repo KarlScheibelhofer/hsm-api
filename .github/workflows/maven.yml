@@ -26,9 +26,9 @@ jobs:
       run: mvn -B package --file pom.xml
     - name: Build and Push native Container Image with Maven
       run: |
-        mvn package -Pnative 
-                    -Dquarkus.container-image.password=${GITHUB_TOKEN}
-                    -Dquarkus.native.container-build=true 
-                    -Dquarkus.container-image.build=true 
+        mvn package -Pnative \
+                    -Dquarkus.container-image.password=${GITHUB_TOKEN} \
+                    -Dquarkus.native.container-build=true \
+                    -Dquarkus.container-image.build=true \
                     -Dquarkus.container-image.push=true
     
