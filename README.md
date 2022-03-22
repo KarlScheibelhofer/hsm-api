@@ -105,3 +105,10 @@ To start PostgreSQL inside a container with a empty database suitable for this p
 docker run --name postgres-hsm --ulimit memlock=-1:-1 -it --rm=true --memory-swappiness=0 -e POSTGRES_USER=hsm -e POSTGRES_PASSWORD=hsm -e POSTGRES_DB=hsm_db -p 5432:5432 postgres:14
 ```
 
+## Push Container Image
+
+To build the container image and push it to the registry configured in the `applicatoin.properties` use:
+
+```
+./mvnw package -Pnative -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true -Dquarkus.container-image.push=true
+```
