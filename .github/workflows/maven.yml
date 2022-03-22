@@ -10,10 +10,8 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-
+  setup:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 17
@@ -22,5 +20,23 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name: Build with Maven
+    - name: Validate Maven Project
+      run: mvn -B validate --file pom.xml
+  build:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+    - name: Build and Test with Maven
       run: mvn -B package --file pom.xml
+  package:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Build and Push native Container Image with Maven
+      run: |
+        mvn package -Pnative 
+                    -Dquarkus.container-image.password=${GITHUB_TOKEN}
+                    -Dquarkus.native.container-build=true 
+                    -Dquarkus.container-image.build=true 
+                    -Dquarkus.container-image.push=true
+    
