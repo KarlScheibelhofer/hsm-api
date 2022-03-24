@@ -107,7 +107,7 @@ docker run --name postgres-hsm --ulimit memlock=-1:-1 -it --rm=true --memory-swa
 
 ## Push Container Image
 
-To build the container image and push it to the registry configured in the `applicatoin.properties` use:
+To build the native container image and push it to the registry configured in the `applicatoin.properties` use:
 
 ```
 ./mvnw package -Pnative -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true -Dquarkus.container-image.push=true
