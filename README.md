@@ -66,14 +66,14 @@ In this chapter, we create a container image with the native executable. It will
 To create a native container image, type:
 
 ```
-./mvnw clean package -Dquarkus.container-image.build=true -Pnative -Dquarkus.native.container-build=true -Dquarkus.native.builder-image=quay.io/quarkus/ubi-quarkus-native-image:21.3.1-java17 -Dquarkus.container-image.image=karl/hsm-api-native:latest
+./mvnw clean package -Dquarkus.container-image.build=true -Pnative -Dquarkus.native.container-build=true -Dquarkus.native.builder-image=quay.io/quarkus/ubi-quarkus-native-image:22.0-java17 -Dquarkus.container-image.image=karl/hsm-api-native:latest
 ```
 
 This uses a GraalVM from a docker image. 
 If you prefer to build with a local GraalVM installation, set `GRAALVM_HOME` environment variable and use this command:
 
 ```
-./mvnw clean package -Dquarkus.container-image.build=true -Pnative -Dquarkus.native.builder-image=quay.io/quarkus/ubi-quarkus-native-image:21.3.1-java17 -Dquarkus.container-image.image=karl/hsm-api-native:latest
+./mvnw clean package -Dquarkus.container-image.build=true -Pnative -Dquarkus.native.builder-image=quay.io/quarkus/ubi-quarkus-native-image:22.0-java17 -Dquarkus.container-image.image=karl/hsm-api-native:latest
 ```
 
 If you have build and tested the native executable before (which takes several minutes) and want this packaged in an image, type:
