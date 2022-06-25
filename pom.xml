@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>at.karl</groupId>
   <artifactId>hsm-api</artifactId>
-  <version>1.0.0-alpha6</version>
+  <version>1.0.0-alpha7</version>
   <properties>
     <maven.compiler.parameters>true</maven.compiler.parameters>
     <maven.compiler.source>17</maven.compiler.source>
@@ -17,7 +17,7 @@
       <dependency>
         <groupId>io.quarkus</groupId>
         <artifactId>quarkus-universe-bom</artifactId>
-        <version>2.9.2.Final</version>
+        <version>2.10.0.Final</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -103,7 +103,7 @@
       <plugin>
         <groupId>io.quarkus</groupId>
         <artifactId>quarkus-maven-plugin</artifactId>
-        <version>2.9.2.Final</version>
+        <version>2.10.0.Final</version>
         <extensions>true</extensions>
         <executions>
           <execution>
