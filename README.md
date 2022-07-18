@@ -112,3 +112,11 @@ To build the native container image and push it to the registry configured in th
 ```
 ./mvnw package -Pnative -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true -Dquarkus.container-image.push=true
 ```
+
+## Logging
+
+To enable json format application logging, set this config:
+
+```
+quarkus.log.console.json=true
+```
