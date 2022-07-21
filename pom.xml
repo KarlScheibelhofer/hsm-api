@@ -2,7 +2,7 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>at.karl</groupId>
+  <groupId>dev.scheibelhofer</groupId>
   <artifactId>hsm-api</artifactId>
   <version>1.0.0-alpha7</version>
   <properties>
@@ -16,7 +16,7 @@
       <dependency>
         <groupId>io.quarkus</groupId>
         <artifactId>quarkus-universe-bom</artifactId>
-        <version>2.10.2.Final</version>
+        <version>2.10.3.Final</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -102,7 +102,7 @@
       <plugin>
         <groupId>io.quarkus</groupId>
         <artifactId>quarkus-maven-plugin</artifactId>
-        <version>2.10.2.Final</version>
+        <version>2.10.3.Final</version>
         <extensions>true</extensions>
         <executions>
           <execution>

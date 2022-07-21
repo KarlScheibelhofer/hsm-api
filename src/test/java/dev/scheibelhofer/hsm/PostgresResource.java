@@ -1,4 +1,4 @@
-package at.karl.hsm;
+package dev.scheibelhofer.hsm;
 
 import java.util.Collections;
 import java.util.Map;

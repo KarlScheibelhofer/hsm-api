@@ -1,4 +1,4 @@
-package at.karl.hsm;
+package dev.scheibelhofer.hsm;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;

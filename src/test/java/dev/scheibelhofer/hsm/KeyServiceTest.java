@@ -1,4 +1,4 @@
-package at.karl.hsm;
+package dev.scheibelhofer.hsm;
 
 import java.nio.charset.StandardCharsets;
 import java.security.PublicKey;
@@ -15,7 +15,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.wildfly.common.Assert;
 
-import at.karl.hsm.Key.Algorithm;
+import dev.scheibelhofer.hsm.Key.Algorithm;
 import io.quarkus.test.common.QuarkusTestResource;
 
 @TransactionalQuarkusTest
