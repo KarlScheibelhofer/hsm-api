@@ -120,3 +120,26 @@ To enable json format application logging, set this config:
 ```
 quarkus.log.console.json=true
 ```
+
+## Update Dependencies
+
+To check if a new quarkus release is available, use
+```
+./mvnw quarkus:update
+```
+
+See `./mvnw quarkus:help -Ddetail -Dgoal=update`
+
+To update dependencies like quarkus to their latest release versions, use
+
+```
+./mvnw versions:use-latest-releases
+```
+
+Check for new plugins:
+
+```
+./mvnw versions:display-plugin-updates 
+```
+
+See documentation of [Maven Versions Plugin](https://www.mojohaus.org/versions-maven-plugin/index.html).
