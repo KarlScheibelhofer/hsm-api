@@ -143,3 +143,33 @@ Check for new plugins:
 ```
 
 See documentation of [Maven Versions Plugin](https://www.mojohaus.org/versions-maven-plugin/index.html).
+
+## Keycloak
+
+
+```
+docker run --name keycloak-19 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin -p 8180:8080 quay.io/keycloak/keycloak:19.0 start-dev
+
+wslview http://localhost:8180/
+
+# Admins Console/<Click "Master" at left top and "Create Realm">/<Real name: hsm-api>/<create>
+./mvnw clean package
+
+java -jar target/quarkus-app/quarkus-run.jar
+
+export access_token=$(curl --insecure --no-progress-meter --request POST --url http://localhost:8180/realms/hsm-api/protocol/openid-connect/token --user hsm-cli:secret --header 'content-type: application/x-www-form-urlencoded' --data 'username=hsm-user-1&password=hsm-user-1&grant_type=password' | jq --raw-output '.access_token' )
+
+
+
+curl -v --request GET --url http://localhost:8080/api/users/me --header "Authorization: Bearer "$access_token
+# HTTP 200 OK
+
+curl -v --request GET --url http://localhost:8080/api/admin --header "Authorization: Bearer "$access_token
+# HTTP 403 Forbidden
+
+export access_token=$(curl --insecure --no-progress-meter --request POST --url http://localhost:8180/realms/hsm-api/protocol/openid-connect/token --user backend-service:secret --header 'content-type: application/x-www-form-urlencoded' --data 'username=admin&password=admin&grant_type=password' | jq --raw-output '.access_token' )
+
+curl -v --request GET --url http://localhost:8080/api/admin --header "Authorization: Bearer "$access_token
+# HTTP 200 OK
+
+```
