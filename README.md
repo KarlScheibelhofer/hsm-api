@@ -2,7 +2,7 @@
 
 This project uses Quarkus, see https://quarkus.io/ .
 
-Tested with OpenJDK 17 on Ubuntu 20.04 (in WSL2).
+Tested with OpenJDK 17 on Ubuntu 22.04 (in WSL2).
 
 ## Running the application in dev mode
 
