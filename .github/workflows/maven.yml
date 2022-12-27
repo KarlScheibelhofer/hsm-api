@@ -53,5 +53,4 @@ jobs:
         file: ./src/main/docker/Dockerfile.native
         push: true
         tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}                    
-  
+        labels: ${{ steps.meta.outputs.labels }}
