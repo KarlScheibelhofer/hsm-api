@@ -15,7 +15,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.wildfly.common.Assert;
 
-import dev.scheibelhofer.hsm.Key.Algorithm;
 import io.quarkus.test.common.QuarkusTestResource;
 
 @TransactionalQuarkusTest
@@ -39,7 +38,7 @@ public class KeyServiceTest {
 
     Assertions.assertEquals(newKeyTemplate.name, newKey1.name);
     Assertions.assertNotNull(newKey1.id);
-    Assertions.assertEquals(Key.Algorithm.EC_P256, newKey1.algorithm);
+    Assertions.assertEquals(KeyAlgorithm.EC_P256, newKey1.algorithm);
   }
 
   @Test
@@ -122,7 +121,7 @@ public class KeyServiceTest {
     newKeyTemplate.name = "NewGeneratedKey";
 
     // test with all available key algorithms
-    for (Key.Algorithm keyAlgoritm : Key.Algorithm.values()) {
+    for (KeyAlgorithm keyAlgoritm : KeyAlgorithm.values()) {
       newKeyTemplate.algorithm = keyAlgoritm;
       Key newKey1 = service.create(newKeyTemplate);
   
@@ -138,7 +137,7 @@ public class KeyServiceTest {
   @ValueSource(strings = {"EC_P256", "EC_P384", "EC_P521", "RSA_PSS_2048", "EC_ED25519", "EC_ED448"})
   public void testSignData(String keyAlgorithm) throws Exception {
     Key keyTemplate = new Key();
-    keyTemplate.algorithm = Algorithm.valueOf(keyAlgorithm);
+    keyTemplate.algorithm = KeyAlgorithm.valueOf(keyAlgorithm);
     keyTemplate.name = "TestSignatureKey";
 
     Key signatureKey = service.create(keyTemplate);

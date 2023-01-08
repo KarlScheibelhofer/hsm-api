@@ -76,7 +76,7 @@ public class KeyService {
 	private void generate(Key newKeyTemplate) {
 		try {
 			if (newKeyTemplate.algorithm == null) {
-				newKeyTemplate.algorithm = Key.Algorithm.EC_P256;
+				newKeyTemplate.algorithm = KeyAlgorithm.EC_P256;
 			}
 			KeyPairGenerator kpg = KeyPairGenerator.getInstance(newKeyTemplate.algorithm.type);
 			switch (newKeyTemplate.algorithm.type) {
