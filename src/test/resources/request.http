@@ -4,6 +4,14 @@ GET http://localhost:8080/keys
 GET http://localhost:8080/keys/1
 
 ###
+POST http://localhost:8080/keys
+content-type: application/json
+
+{
+    "name": "key-1"
+}
+
+###
 
 POST http://localhost:8080/keys
 content-type: application/json
@@ -62,4 +70,7 @@ abcd
 
 DELETE http://localhost:8080/keys/1
 
-abcd
+###
+GET http://localhost:8080/info/key-algorithms
+###
+

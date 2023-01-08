@@ -30,7 +30,7 @@ public class InfoResourceTest {
             .response();
 
         String algorithmList = response.getBody().asString();
-        assertThat(algorithmList, equalTo("EC_P256 EC_P384 EC_P521 RSA_PSS_2048 EC_ED25519 EC_ED448"));     
+        assertThat(algorithmList, equalTo("EC_ED25519 EC_ED448 EC_P256 EC_P384 EC_P521 RSA_PSS_2048"));  
     }
     
 }

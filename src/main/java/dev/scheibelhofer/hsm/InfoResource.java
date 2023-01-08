@@ -19,7 +19,7 @@ public class InfoResource {
      @Produces(MediaType.TEXT_PLAIN)
      public Response getKeyAlgorithms() {
          Log.info("get key algorithms");
-         String algorithmListStr = Stream.of(KeyAlgorithm.values()).map(Enum::name).collect(Collectors.joining(" "));
+         String algorithmListStr = Stream.of(KeyAlgorithm.values()).map(Enum::name).sorted().collect(Collectors.joining(" "));
          return Response.ok(algorithmListStr).build();
      }
 }
