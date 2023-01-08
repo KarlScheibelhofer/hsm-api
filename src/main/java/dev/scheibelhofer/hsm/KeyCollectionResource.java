@@ -1,6 +1,8 @@
 package dev.scheibelhofer.hsm;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -49,4 +51,13 @@ public class KeyCollectionResource {
     	return Response.status(Response.Status.CREATED).entity(k).build();
      }
 
+     @GET
+     @Path("/algorithms")
+     @Produces(MediaType.TEXT_PLAIN)
+     public Response getKeyAlgorithms() {
+         Log.info("get key algorithms");
+         String algorithmListStr = Stream.of(KeyAlgorithm.values()).map(Enum::name).sorted().collect(Collectors.joining(" "));
+         return Response.ok(algorithmListStr).build();
+     }
+     
 }
