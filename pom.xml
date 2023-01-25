@@ -4,13 +4,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>dev.scheibelhofer</groupId>
   <artifactId>hsm-api</artifactId>
-  <version>1.0.0-alpha11</version>
+  <version>1.0.0-alpha12</version>
   <properties>
     <maven.compiler.parameters>true</maven.compiler.parameters>
     <maven.compiler.release>17</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <quarkus.version>2.15.2.Final</quarkus.version>
+    <quarkus.version>2.16.0.Final</quarkus.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -121,7 +121,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.0.0-M7</version>
+        <version>3.0.0-M8</version>
         <configuration>
           <systemPropertyVariables>
             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
@@ -148,7 +148,7 @@
         <plugins>
           <plugin>
             <artifactId>maven-failsafe-plugin</artifactId>
-            <version>3.0.0-M7</version>
+            <version>3.0.0-M8</version>
             <executions>
               <execution>
                 <goals>
