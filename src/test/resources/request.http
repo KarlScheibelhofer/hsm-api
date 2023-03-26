@@ -73,4 +73,9 @@ DELETE http://localhost:8080/keys/1
 ###
 GET http://localhost:8080/info/key-algorithms
 ###
-
+GET http://localhost:9000/q/health
+###
+GET http://localhost:9000/q/health/live
+###
+GET http://localhost:9000/q/health/ready
+###
