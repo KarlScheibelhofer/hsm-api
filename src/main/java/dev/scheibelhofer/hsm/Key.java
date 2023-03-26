@@ -10,7 +10,7 @@ import java.security.spec.X509EncodedKeySpec;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 

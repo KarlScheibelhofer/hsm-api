@@ -16,9 +16,9 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.transaction.Transactional;
-import javax.ws.rs.BadRequestException;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.BadRequestException;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
