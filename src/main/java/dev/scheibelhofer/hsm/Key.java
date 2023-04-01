@@ -21,7 +21,9 @@ public class Key extends PanacheEntity {
 		return find("name", name).list();
 	}
 
-	public Key() { }
+	public Key() { 
+		// empty
+	}
 	
 	public String name;
 
@@ -49,7 +51,7 @@ public class Key extends PanacheEntity {
 			keyFactory = KeyFactory.getInstance(algorithm.type);
 			this.privateKey = keyFactory.generatePrivate(keySpec);
 		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-			throw new RuntimeException("failed to restore java private key object from encoded key", e);
+			throw new HsmException("failed to restore java private key object from encoded key", e);
 		}
 		return this.privateKey;
 	}
@@ -64,7 +66,7 @@ public class Key extends PanacheEntity {
 			keyFactory = KeyFactory.getInstance(algorithm.type);
 			this.publicKey = keyFactory.generatePublic(keySpec);
 		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-			throw new RuntimeException("failed to restore java public key object from encoded key", e);
+			throw new HsmException("failed to restore java public key object from encoded key", e);
 		}
 		return this.publicKey;
 	}

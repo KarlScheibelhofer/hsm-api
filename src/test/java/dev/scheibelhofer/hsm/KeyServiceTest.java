@@ -15,10 +15,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.wildfly.common.Assert;
 
-import io.quarkus.test.common.QuarkusTestResource;
 
 @TransactionalQuarkusTest
-@QuarkusTestResource(PostgresResource.class) 
 public class KeyServiceTest {
 
   @Inject

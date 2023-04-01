@@ -33,12 +33,10 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.Response;
 
 @QuarkusTest
-@QuarkusTestResource(PostgresResource.class) 
 @TestMethodOrder(OrderAnnotation.class)
 public class KeyResourceTest {
 

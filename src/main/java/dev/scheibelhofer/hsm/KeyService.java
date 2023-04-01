@@ -35,7 +35,7 @@ public class KeyService {
 		long t0 = System.nanoTime();
 		Key k = Key.findById(id);
 		long t1 = System.nanoTime();
-		Log.infof("getById", kv("stats", Map.of("code", "0", "duration", Double.valueOf((t1 - t0)/1e6).toString())));
+		Log.infof("getById", kv("stats", Map.of("code", "0", "duration", Double.toString((t1 - t0)/1e6))));
 		return k;
 	}
 
@@ -86,6 +86,7 @@ public class KeyService {
 					break;
 				case "RSA":
 					kpg.initialize(newKeyTemplate.algorithm.size);
+					break;
 				default:
 			}
 			KeyPair kp = kpg.genKeyPair();
@@ -102,15 +103,14 @@ public class KeyService {
 			String signatureAlgorithm = key.algorithm.preferredAlgorithm;
 			java.security.Signature sigService = java.security.Signature.getInstance(signatureAlgorithm);
 			sigService.initSign(key.getPrivateKey());
-			switch (signatureAlgorithm) {
-				case "RSASSA-PSS" -> sigService.setParameter(new PSSParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA256, 32, 1));
+			if ("RSASSA-PSS".equals(signatureAlgorithm)) {
+				sigService.setParameter(new PSSParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA256, 32, 1));
 			}
 			sigService.update(data);
 			byte[] signatureValue = sigService.sign();
-			Signature signature = new Signature(id, signatureAlgorithm, signatureValue);
-			return signature;
+			return new Signature(id, signatureAlgorithm, signatureValue);
 		} catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException | InvalidAlgorithmParameterException e) {
-			throw new RuntimeException("failed to create signature: " + e.getMessage(), e);
+			throw new HsmException("failed to create signature: " + e.getMessage(), e);
 		}
     }
 

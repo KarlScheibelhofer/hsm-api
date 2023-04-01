@@ -91,9 +91,9 @@ docker-compose --file src/main/docker/docker-compose-native.yaml down
 
 ## Setup DB
 
-The JUnit tests start the required PostgreSQL DB automatically. 
+The JUnit tests and quarkus dev mode start the required PostgreSQL DB automatically. 
 
-If you start the application alone, you must provide a running DB.
+If you start the application in prod mode, you must provide a running DB.
 To start PostgreSQL inside a container with a empty database suitable for this project:
 
 ```
