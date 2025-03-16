@@ -35,7 +35,7 @@ If you want to learn more about building native executables, please consult http
 
 This chapter shows how to build an image containing the Java VM and the appliacation, i.e. JARs.
 
-To create a container image of the aplication, use:
+To create a container image of the application, use:
 
 ```bash
 ./mvnw clean package -Dquarkus.container-image.build=true -Dquarkus.container-image.image=karl/hsm-api:latest
